@@ -1,0 +1,7 @@
+development:
+    driver: postgres
+    open: user='' dbname=instantly_test sslmode=disable
+
+production:
+    driver: postgres
+    open: user='' dbname=instantly sslmode=disable
