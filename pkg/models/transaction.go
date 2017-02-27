@@ -1,11 +1,10 @@
 package models
 
 import (
-	"errors"
 	"time"
 
 	"github.com/ngenerio/instantly/pkg/payments"
-	"github.com/ttacon/libphonenumber"
+	"github.com/ngenerio/instantly/pkg/utils"
 )
 
 const (
@@ -14,22 +13,20 @@ const (
 	StatusSuccess = "SUCCESS"
 )
 
-var errorInvalidPhoneNumber = errors.New("Invalid phone number. Ensure number is in international format (23327xxxxxxx)")
-
 type Transaction struct {
-	Id           int
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	Amount       float64
-	Type         string
-	MNO          string
-	Reference    string
-	Message      string
-	MobileNumber string
-	ReceiveToken string
-	NetworkID    string `gorm:"column:network_id"`
-	Status       string
-	ReferenceID  string `gorm:"column:reference_id"`
+	Id           int       `json:"id"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	Amount       float64   `json:"amount"`
+	Type         string    `json:"type"`
+	MNO          string    `json:"mno"`
+	Reference    string    `json:"reference"`
+	Message      string    `json:"message"`
+	MobileNumber string    `json:"mobileNumber"`
+	ReceiveToken string    `json:"receiveToken"`
+	NetworkID    string    `json:"networkID" gorm:"column:network_id"`
+	Status       string    `json:"status"`
+	ReferenceID  string    `json:"referenceID" gorm:"column:reference_id"`
 }
 
 func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string) (*Transaction, error) {
@@ -56,18 +53,18 @@ func (trx *Transaction) Update() error {
 	return db.Save(trx).Error
 }
 
+func (trx *Transaction) GetTransaction(queryParam map[string]interface{}) error {
+	err := db.Where(queryParam).First(trx).Error
+	return err
+}
+
 func (trx *Transaction) Validate() error {
-	phoneNumber, err := libphonenumber.Parse(trx.MobileNumber, "GH")
+	phoneNumber, err := utils.ParsePhoneNumber(trx.MobileNumber)
 
 	if err != nil {
 		return err
 	}
 
-	ok := libphonenumber.IsValidNumberForRegion(phoneNumber, "GH")
-
-	if !ok {
-		return errorInvalidPhoneNumber
-	}
-
+	trx.MobileNumber = phoneNumber
 	return nil
 }

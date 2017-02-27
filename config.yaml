@@ -6,6 +6,7 @@ UNITY_CLIENT_ID: jlbtfmji
 UNITY_CLIENT_SECRET: enpmkuke
 BROKER_TOKEN: 8b05b816-1ca6-4f60-9ca2-966a15960154
 BROKER_SENDER: Instantly
+BROKER_CALLBACK_URL: https://instantly.localtunnel.me/api/v1/payment/callback
 BROKER_BASE_URL: https://api.smsgh.com/usp
 POSTGRES_DBNAME: instantly_test
 POSTGRES_URL: user='' dbname=instantly_test sslmode=disable

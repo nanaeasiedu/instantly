@@ -22,15 +22,17 @@ type Broker struct {
 	Token        string
 	BaseURL      string
 	BrokerSender string
+	CallbackURL  string
 }
 
-func NewBroker(clientId, clientSecret, brokerToken, brokerSender, baseUrl string) *Broker {
+func NewBroker(clientId, clientSecret, brokerToken, brokerSender, baseURL, callbackURL string) *Broker {
 	broker := &Broker{
 		ClientId:     clientId,
 		ClientSecret: clientSecret,
 		Token:        brokerToken,
-		BaseURL:      baseUrl,
+		BaseURL:      baseURL,
 		BrokerSender: brokerSender,
+		CallbackURL:  callbackURL,
 	}
 
 	return broker
@@ -45,6 +47,7 @@ func (b *Broker) DebitWallet(requestDetails payments.MPaymentRequest) payments.M
 	request.Sender = b.BrokerSender
 	request.Type = "withdraw"
 	request.Token = b.Token
+	request.CallbackURL = b.CallbackURL
 
 	if request.Provider == "VODAFONE" {
 		request.ReceiveToken = requestDetails.GetReceiveToken()
@@ -84,6 +87,9 @@ func (b *Broker) NewRequest(data interface{}) payments.MPaymentResponse {
 		return payments.NewResponse(nil, b.NewError(errs))
 	}
 
+	// Don't worry about the magic here
+	// I don't understand it, without this, it won't work
+	// the data returned from has to be parsed and any null character \x00 must be replaced with an empty string
 	body = strings.Replace(body, "\x00", "", -1)
 	response := Response{}
 	withoutNullBytes := bytes.Trim([]byte(body), "\x00")

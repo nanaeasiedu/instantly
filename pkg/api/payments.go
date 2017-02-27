@@ -8,6 +8,8 @@ import (
 	"github.com/ngenerio/instantly/pkg/models"
 	"github.com/ngenerio/instantly/pkg/payments"
 
+	"strings"
+
 	"github.com/labstack/echo"
 	"github.com/ngenerio/instantly/pkg/config"
 	log "github.com/sirupsen/logrus"
@@ -18,7 +20,7 @@ const (
 	Credit = "credit"
 )
 
-var paymentsSolution payments.MPayment = broker.NewBroker(config.Settings.UnityClientID, config.Settings.UnityClientSecret, config.Settings.BrokerToken, config.Settings.BrokerSender, config.Settings.BrokerBaseURL)
+var paymentsSolution payments.MPayment = broker.NewBroker(config.Settings.UnityClientID, config.Settings.UnityClientSecret, config.Settings.BrokerToken, config.Settings.BrokerSender, config.Settings.BrokerBaseURL, config.Settings.BrokerCallbackURL)
 
 func HandlePayments(c echo.Context) error {
 	var request payments.MPaymentRequest = payments.NewReqeust()
@@ -57,12 +59,7 @@ func HandlePayments(c echo.Context) error {
 	newTransaction.Reference = response.GetTransactionID()
 	newTransaction.NetworkID = response.GetNetworkID()
 
-	if request.GetType() == Debit {
-		newTransaction.Status = models.StatusPending
-	} else {
-		newTransaction.Status = models.StatusSuccess
-	}
-
+	newTransaction.Status = models.StatusPending
 	err = newTransaction.Update()
 
 	if err != nil {
@@ -77,6 +74,25 @@ func HandlePaymentsTransfer(e echo.Context) error {
 	return nil
 }
 
-func HandleCallback(e echo.Context) error {
+func HandleCallback(c echo.Context) error {
+	transactionId := c.QueryParam("transactionId")
+	statusOfTrx := c.QueryParam("status")
+
+	log.Info("Callback url called by broker with params: ", transactionId, statusOfTrx)
+	newTrx := new(models.Transaction)
+	err := newTrx.GetTransaction(map[string]interface{}{"reference": transactionId})
+
+	if err != nil {
+		log.Error("Error occured retreiving transaction from db", err)
+		return nil
+	}
+
+	if strings.ToLower(statusOfTrx) == "failed" {
+		newTrx.Status = models.StatusFailed
+	} else {
+		newTrx.Status = models.StatusSuccess
+	}
+
+	newTrx.Update()
 	return nil
 }

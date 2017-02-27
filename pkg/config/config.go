@@ -15,6 +15,7 @@ type Conf struct {
 	UnityClientSecret string
 	BrokerToken       string
 	BrokerSender      string
+	BrokerCallbackURL string
 	BrokerBaseURL     string
 	PostgresURL       string
 	PostgresDBName    string
@@ -41,4 +42,5 @@ func init() {
 	Settings.PostgresURL = viper.GetString("POSTGRES_URL")
 	Settings.PostgresDBName = viper.GetString("POSTGRES_DBNAME")
 	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR")
+	Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
 }
