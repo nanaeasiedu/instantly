@@ -60,13 +60,20 @@ This is the data you need to send to `Instantly`:
 
 ```json
     {
-        "phoneNumber": "2332xxxxxxxx", // phone number
-        "amount": 50.00, // amount to send
-        "mno": "TIGO", // the mobile network operator
-        "name": "Eugene Asiedu", // the name of person sending it
-        "type": "debit" // either `debit` or `credit`
+        "phoneNumber": "2332xxxxxxxx",
+        "amount": 50.00,
+        "mno": "TIGO",
+        "name": "Eugene Asiedu",
+        "type": "debit"
     }
 ```
+
+##### Parameters
+- phoneNumber - the phone number of the individual
+- amount - the account to be debited or credited
+- mno - the mobile network operator
+- name - the name of the individual
+- type - either debit or credit
 
 
 The payment endpoint is http://`host`:`port`/api/v1/payment. Send the `API_CLIENT_USERNAME` and `API_CLIENT_PASSWORD` as your `Basic Authentication` details.
