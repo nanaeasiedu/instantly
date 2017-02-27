@@ -2,9 +2,12 @@ fmt:
 	@go fmt ./...
 
 install:
-	@godep save ./...
+	@glide installl
+
+build:
+	@go build -o instantly
 
 run:
 	./instantly
 
-.PHONY: install run
+.PHONY: install build run
