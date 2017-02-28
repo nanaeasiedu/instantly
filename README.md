@@ -20,9 +20,9 @@ Create a config.yaml in the root directory of this project. Specify the configur
 SERVER_ENV: development # development or production
 API_CLIENT_USERNAME: username # The username for basic auth purposes with instantly api server
 API_CLIENT_PASSWORD: password # The password for basic auth purposes with instantly api server
-UNITY_CLIENT_ID: jlbtfmji # Your unity client ID from SMSGH
-UNITY_CLIENT_SECRET: enpmkuke # Your unity client secret from SMSGH
-BROKER_TOKEN: 8b05b816-1ca6-4f60-9ca2-966a15960154 # Your broker token from broker
+UNITY_CLIENT_ID: xxxxxxxx # Your unity client ID from SMSGH
+UNITY_CLIENT_SECRET: xxxxxxxx # Your unity client secret from SMSGH
+BROKER_TOKEN: xxxxx-xxxx-xxxx-xxxxx-xxxxxxxxx # Your broker token from broker
 BROKER_SENDER: Instantly # Your app name
 BROKER_CALLBACK_URL: https://<host>:/api/v1/payment/callback # Specify host as the url this app has been hosted at
 BROKER_BASE_URL: https://api.smsgh.com/usp # Don't touch this
