@@ -17,8 +17,8 @@ type Conf struct {
 	BrokerSender      string
 	BrokerCallbackURL string
 	BrokerBaseURL     string
-	PostgresURL       string
-	PostgresDBName    string
+	DBName            string
+	DBPath            string
 	MigrationsDir     string
 }
 
@@ -39,8 +39,8 @@ func init() {
 	Settings.BrokerToken = viper.GetString("BROKER_TOKEN")
 	Settings.BrokerSender = viper.GetString("BROKER_SENDER")
 	Settings.BrokerBaseURL = viper.GetString("BROKER_BASE_URL")
-	Settings.PostgresURL = viper.GetString("POSTGRES_URL")
-	Settings.PostgresDBName = viper.GetString("POSTGRES_DBNAME")
-	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR")
+	Settings.DBName = viper.GetString("DB_NAME")
+	Settings.DBPath = viper.GetString("DB_PATH")
+	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR") + Settings.DBName
 	Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
 }

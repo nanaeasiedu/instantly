@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/ngenerio/instantly/pkg/broker"
 	"github.com/ngenerio/instantly/pkg/models"
@@ -88,10 +89,14 @@ func HandleCallback(c echo.Context) error {
 	}
 
 	if strings.ToLower(statusOfTrx) == "failed" {
+		newTrx.Message = "Payment failed"
 		newTrx.Status = models.StatusFailed
 	} else {
+		newTrx.Message = "Payment was successfully"
 		newTrx.Status = models.StatusSuccess
 	}
+
+	newTrx.CompletedAt = time.Now()
 
 	newTrx.Update()
 	return nil

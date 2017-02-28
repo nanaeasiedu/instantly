@@ -17,6 +17,7 @@ type Transaction struct {
 	Id           int       `json:"id"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
+	CompletedAt  time.Time `json:"completedAt"`
 	Amount       float64   `json:"amount"`
 	Type         string    `json:"type"`
 	MNO          string    `json:"mno"`
@@ -24,9 +25,9 @@ type Transaction struct {
 	Message      string    `json:"message"`
 	MobileNumber string    `json:"mobileNumber"`
 	ReceiveToken string    `json:"receiveToken"`
-	NetworkID    string    `json:"networkID" gorm:"column:network_id"`
+	NetworkID    string    `json:"networkID"`
 	Status       string    `json:"status"`
-	ReferenceID  string    `json:"referenceID" gorm:"column:reference_id"`
+	ReferenceID  string    `json:"referenceID"`
 }
 
 func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string) (*Transaction, error) {

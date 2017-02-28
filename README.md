@@ -14,21 +14,21 @@ You, yes you, are a developer who is building the NBA (Next Big App) and the app
 
 #### Configuration
 
-The repo contains a `config.yaml`, we set all our configuration there:
+Create a config.yaml in the root directory of this project. Specify the configuration as the example below:
 
 ```yaml
-SERVER_ENV: development #The server environment (development, production)
-API_CLIENT_USERNAME: username # For basic authentication with instantly api
-API_CLIENT_PASSWORD: password # For basic authentication with instantly api
-UNITY_CLIENT_ID: instantly_nba # client_id from unity
-UNITY_CLIENT_SECRET: instantly_nba_secret # client_secret from unity
-BROKER_TOKEN: xxxxx-xxxx-xxxx-xxxx-xxxxxxxx # token from Broker
-BROKER_SENDER: Instantly # App name
-BROKER_CALLBACK_URL: https://instantly.localtunnel.me/api/v1/payment/callback # Callback URL used when the mobile money transaction fails or succeeds
-BROKER_BASE_URL: https://api.smsgh.com/usp # Broker URL
-POSTGRES_DBNAME: instantly_test # Database name to store transactions data
-POSTGRES_URL: user='' dbname=instantly_test sslmode=disable # Postgres Database connection details
-MIGRATIONS_DIR: db/migrations # You don't want to touch this. Contains migrations data
+SERVER_ENV: development # development or production
+API_CLIENT_USERNAME: username # The username for basic auth purposes with instantly api server
+API_CLIENT_PASSWORD: password # The password for basic auth purposes with instantly api server
+UNITY_CLIENT_ID: jlbtfmji # Your unity client ID from SMSGH
+UNITY_CLIENT_SECRET: enpmkuke # Your unity client secret from SMSGH
+BROKER_TOKEN: 8b05b816-1ca6-4f60-9ca2-966a15960154 # Your broker token from broker
+BROKER_SENDER: Instantly # Your app name
+BROKER_CALLBACK_URL: https://<host>:/api/v1/payment/callback # Specify host as the url this app has been hosted at
+BROKER_BASE_URL: https://api.smsgh.com/usp # Don't touch this
+DB_NAME: postgres # Database name: either `postgres` or `mysql`
+DB_PATH: user='' dbname=instantly_test sslmode=disable # Your database connection url
+MIGRATIONS_DIR: db/db_ # Don't touch this
 ```
 
 
