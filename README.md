@@ -12,7 +12,19 @@ I have been building apps that need mobile money integration and I realise I wil
 You, yes you, are a developer who is building the NBA (Next Big App) and the app needs to integrate with mobile money payments in Ghana, then use [Instantly](https://github.com/ngenerio/instantly). First register on [Unity](https://unity.smsgh.com), get your `client_id` and `client_secret` from [Unity](https://unity.smsgh.com/account/api-accounts) and go to [Broker](https://apps.smsgh.com/broker/), create a wallet and go to [token](https://apps.smsgh.com/broker/apitokens) to retrieve your wallet `token`.
 
 
-#### Configuration
+#### Running
+
+You need `postgres` and `go` installed on your system to get this running:
+
+#### Manual
+
+- Clone the project to your $GOPATH
+- Install the dependencies
+- Run
+
+```bash
+$ git clone https://github.com/ngenerio/instantly
+```
 
 Create a config.yaml in the root directory of this project. Specify the configuration as the example below:
 
@@ -31,28 +43,14 @@ DB_PATH: user='' dbname=instantly_test sslmode=disable # Your database connectio
 MIGRATIONS_DIR: db/db_ # Don't touch this
 ```
 
-
-#### Running
-
-You need `postgres` and `go` installed on your system to get this running:
-
-#### Manual
-- Clone the project to your $GOPATH
-- Install the dependencies
-- Run
+Run these commands to install, build and run:
 
 ```bash
-$ git clone https://github.com/ngenerio/instantly
 $ glide install
+$ make build
 $ ./instantly
 ```
 
-#### Using GO GET
-
-
-```bash
-$ go get github.com/ngenerio/instantly
-```
 
 #### Awesome Instant API Endpoints
 
@@ -69,7 +67,7 @@ This is the data you need to send to `Instantly`:
 ```
 
 ##### Parameters
-- phoneNumber - the phone number of the individual
+- `phoneNumber` - the phone number of the individual
 - amount - the account to be debited or credited
 - mno - the mobile network operator
 - name - the name of the individual
