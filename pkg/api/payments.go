@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/ngenerio/instantly/pkg/broker"
@@ -24,17 +23,14 @@ const (
 var paymentsSolution payments.MPayment = broker.NewBroker(config.Settings.UnityClientID, config.Settings.UnityClientSecret, config.Settings.BrokerToken, config.Settings.BrokerSender, config.Settings.BrokerBaseURL, config.Settings.BrokerCallbackURL)
 
 func HandlePayments(c echo.Context) error {
-	var request payments.MPaymentRequest = payments.NewReqeust()
+	request := payments.NewReqeust()
 	err := c.Bind(request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, Response{Status: "error", Message: err.Error()})
 	}
 
 	log.Info("Log the api request body", request)
-	requestInterface := reflect.ValueOf(request).Interface()
-	paymentRequest := requestInterface.(payments.MPaymentRequest)
-
-	newTransaction, err := models.CreateTransaction(paymentRequest, request.GetType())
+	newTransaction, err := models.CreateTransaction(request, request.GetType())
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, Response{Status: "error", Message: err.Error()})
@@ -42,9 +38,9 @@ func HandlePayments(c echo.Context) error {
 
 	var response payments.MPaymentResponse
 	if request.GetType() == Debit {
-		response = paymentsSolution.DebitWallet(paymentRequest)
+		response = paymentsSolution.DebitWallet(request)
 	} else {
-		response = paymentsSolution.CreditWallet(paymentRequest)
+		response = paymentsSolution.CreditWallet(request)
 	}
 
 	if response.IsError() {
@@ -92,7 +88,7 @@ func HandleCallback(c echo.Context) error {
 		newTrx.Message = "Payment failed"
 		newTrx.Status = models.StatusFailed
 	} else {
-		newTrx.Message = "Payment was successfully"
+		newTrx.Message = "Payment was successful"
 		newTrx.Status = models.StatusSuccess
 	}
 
