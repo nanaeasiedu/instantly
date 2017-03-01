@@ -7,16 +7,16 @@ Mobile money API client built on top of [BROKER](http://developers.smsgh.com/doc
 I have been building apps that need mobile money integration and I realise I will probably be doing a lot of repetitive work all the time. Instantly hopes to solve that problem for me and for you too. One API for all my mobile money integrations built on top of SMSGH's BROKER
 
 
-### Documentation
+## Documentation
 
 You, yes you, are a developer who is building the NBA (Next Big App) and the app needs to integrate with mobile money payments in Ghana, then use [Instantly](https://github.com/ngenerio/instantly). First register on [Unity](https://unity.smsgh.com), get your `client_id` and `client_secret` from [Unity](https://unity.smsgh.com/account/api-accounts) and go to [Broker](https://apps.smsgh.com/broker/), create a wallet and go to [token](https://apps.smsgh.com/broker/apitokens) to retrieve your wallet `token`.
 
 
-#### Running
+### Running
 
 You need `postgres` and `go` installed on your system to get this running:
 
-#### Manual
+### Manual
 
 - Clone the project to your $GOPATH
 - Install the dependencies
@@ -52,7 +52,7 @@ $ ./instantly
 ```
 
 
-#### Awesome Instant API Endpoints
+### Awesome Instant API Endpoints
 
 This is the data you need to send to `Instantly`:
 
@@ -68,10 +68,10 @@ This is the data you need to send to `Instantly`:
 
 ##### Parameters
 - `phoneNumber` - the phone number of the individual
-- amount - the account to be debited or credited
-- mno - the mobile network operator
-- name - the name of the individual
-- type - either debit or credit
+- `amount` - the account to be debited or credited
+- `mno` - the mobile network operator
+- `name` - the name of the individual
+- `type` - either debit or credit
 
 
 The payment endpoint is http://`host`:`port`/api/v1/payment. Send the `API_CLIENT_USERNAME` and `API_CLIENT_PASSWORD` as your `Basic Authentication` details.
