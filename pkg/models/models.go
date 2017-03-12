@@ -3,7 +3,6 @@ package models
 import (
 	"bitbucket.org/liamstask/goose/lib/goose"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/ngenerio/instantly/pkg/config"
 	log "github.com/sirupsen/logrus"
@@ -17,13 +16,8 @@ func Setup() error {
 		OpenStr: config.Settings.DBPath,
 	}
 
-	if config.Settings.DBName == "mysql" {
-		gooseDriver.Dialect = &goose.MySqlDialect{}
-		gooseDriver.Import = "github.com/go-sql-driver/mysql"
-	} else {
-		gooseDriver.Dialect = &goose.PostgresDialect{}
-		gooseDriver.Import = "github.com/lib/pq"
-	}
+	gooseDriver.Dialect = &goose.PostgresDialect{}
+	gooseDriver.Import = "github.com/lib/pq"
 
 	migrateConf := &goose.DBConf{
 		MigrationsDir: config.Settings.MigrationsDir,

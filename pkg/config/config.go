@@ -41,6 +41,6 @@ func init() {
 	Settings.BrokerBaseURL = viper.GetString("BROKER_BASE_URL")
 	Settings.DBName = viper.GetString("DB_NAME")
 	Settings.DBPath = viper.GetString("DB_PATH")
-	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR") + Settings.DBName
+	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR")
 	Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
 }

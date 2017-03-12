@@ -1,9 +1,0 @@
-development:
-    driver: mysql
-    open: root:@(:3307)/instantly_test?charset=utf8&parseTime=True&loc=Local
-    dialect: mysql
-
-production:
-    driver: mysql
-    open: root:@(:3307)/instantly?charset=utf8&parseTime=True&loc=Local
-    dialect: mysql

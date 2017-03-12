@@ -28,6 +28,7 @@ type Transaction struct {
 	NetworkID    string    `json:"networkID"`
 	Status       string    `json:"status"`
 	ReferenceID  string    `json:"referenceID"`
+	WalletID     int       `json:"walletID"`
 }
 
 func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string) (*Transaction, error) {
