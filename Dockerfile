@@ -1,6 +1,7 @@
 FROM golang:latest
 
-RUN apt-get install software-properties-common python-software-properties \
+RUN apt-get update \
+  && apt-get install software-properties-common python-software-properties \
   && go get bitbucket.org/liamstask/goose/cmd/goose \
   && add-apt-repository ppa:masterminds/glide \
   && apt-get update \
@@ -16,3 +17,4 @@ RUN glide install \
 ENTRYPOINT ["instantly"]
 
 EXPOSE 3000
+g
