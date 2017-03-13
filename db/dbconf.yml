@@ -4,4 +4,4 @@ development:
 
 production:
     driver: postgres
-    open: user='' dbname=instantly sslmode=disable
+    open: user=instantly password=instantly host=ec2-52-89-184-99.us-west-2.compute.amazonaws.com dbname=instantly_Test sslmode=disable
