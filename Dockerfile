@@ -1,11 +1,11 @@
 FROM golang:latest
 
-RUN sudo apt-get update \
-  && sudo apt-get install software-properties-common python-software-properties \
+RUN apt-get update \
+  && apt-get install software-properties-common python-software-properties \
   && go get bitbucket.org/liamstask/goose/cmd/goose \
-  && sudo add-apt-repository ppa:masterminds/glide \
-  && sudo apt-get update \
-  && sudo apt-get install glide
+  && gadd-apt-repository ppa:masterminds/glide \
+  && apt-get update \
+  && apt-get install glide
 
 ENV SERVER_ENV production
 RUN mkdir -p /go/src/github.com/ngenerio/instantly
