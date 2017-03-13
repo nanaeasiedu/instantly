@@ -11,6 +11,6 @@ ADD . /go/src/github.com/ngenerio/instantly
 WORKDIR  /go/src/github.com/ngenerio/instantly
 RUN go build
 
-ENTRYPOINT ["instantly"]
+ENTRYPOINT ["/go/src/github.com/ngenerio/instantly"]
 
 EXPOSE 3000
