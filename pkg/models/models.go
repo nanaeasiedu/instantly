@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"bitbucket.org/liamstask/goose/lib/goose"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -11,6 +13,7 @@ import (
 var db *gorm.DB
 
 func Setup() error {
+	log.Info(fmt.Sprintf("Coonfiguring db: %s %s %s", config.Settings.DBName, config.Settings.DBPath, config.Settings.Env))
 	gooseDriver := goose.DBDriver{
 		Name:    config.Settings.DBName,
 		OpenStr: config.Settings.DBPath,

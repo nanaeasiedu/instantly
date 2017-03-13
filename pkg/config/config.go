@@ -1,8 +1,6 @@
 package config
 
 import (
-	"os"
-
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -43,7 +41,7 @@ func init() {
 	Settings.BrokerBaseURL = viper.GetString("BROKER_BASE_URL")
 	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR")
 
-	if os.Getenv("SERVER_ENV") == "PRODUCTION" {
+	if Settings.Env == "production" {
 		Settings.DBName = viper.GetString("PROD_DB_NAME")
 		Settings.DBPath = viper.GetString("PROD_DB_PATH")
 		Settings.BrokerCallbackURL = viper.GetString("PROD_BROKER_CALLBACK_URL")
