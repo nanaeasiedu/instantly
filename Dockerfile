@@ -1,11 +1,11 @@
 FROM golang:latest
 
 RUN apt-get update \
-  && apt-get install software-properties-common python-software-properties \
+  && apt-get -y install software-properties-common python-software-properties \
   && go get bitbucket.org/liamstask/goose/cmd/goose \
-  && gadd-apt-repository ppa:masterminds/glide \
+  && add-apt-repository ppa:masterminds/glide \
   && apt-get update \
-  && apt-get install glide
+  && apt-get -y install glide
 
 ENV SERVER_ENV production
 RUN mkdir -p /go/src/github.com/ngenerio/instantly
@@ -17,4 +17,3 @@ RUN glide install \
 ENTRYPOINT ["instantly"]
 
 EXPOSE 3000
-g
