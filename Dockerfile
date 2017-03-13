@@ -10,6 +10,7 @@ RUN mkdir -p /go/src/github.com/ngenerio/instantly
 ADD . /go/src/github.com/ngenerio/instantly
 WORKDIR  /go/src/github.com/ngenerio/instantly
 RUN go build
+RUN chmod +x /go/src/github.com/ngenerio/instantly
 
 ENTRYPOINT ["/go/src/github.com/ngenerio/instantly"]
 
