@@ -1,6 +1,6 @@
 development:
     driver: postgres
-    open: host=ec2-52-36-245-123.us-west-2.compute.amazonaws.com user=instantly password=circa_instantly dbname=instantly_test sslmode=disable
+    open: user='' dbname=instantly_test sslmode=disable
 
 production:
     driver: postgres

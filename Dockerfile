@@ -1,17 +1,16 @@
-FROM alpine:3.3
-MAINTAINER Eugene Asiedu <ngene84@gmail.com>
+FROM golang:latest
 
-ENV INSTANTLY_VERSION 0.0.1-rc
+RUN go get bitbucket.org/liamstask/goose/cmd/goose \
+  && add-apt-repository ppa:masterminds/glide \
+  && apt-get update \
+  && apt-get install glide
 
-RUN \
-  apk update && \
-  apk add ca-certificates && \
-  update-ca-certificates && \
-  cd /tmp && \
-  wget https://github.com/ngenerio/instantly/releases/download/v$instantly_VERSION/instantly_linux_amd64.zip && \
-  unzip instantly_linux_amd64.zip -d /usr/bin && \
-  mv /usr/bin/instantly_linux_amd64 /usr/bin/instantly && \
-  rm -f instantly_linux_amd64.zip
+RUN mkdir -p /go/src/github.com/ngenerio/instantly
+ADD . /go/src/github.com/ngenerio/instantly
+WORKDIR  /go/src/github.com/ngenerio/instantly
+RUN glide install \
+  && go build
 
-EXPOSE 5000
-CMD ["/usr/bin/instantly"]
+ENTRYPOINT ["instantly"]
+
+EXPOSE 3000
