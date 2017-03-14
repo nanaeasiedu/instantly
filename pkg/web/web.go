@@ -18,7 +18,7 @@ func init() {
 	var err error
 	gob.Register(&models.User{})
 	gob.Register(&Flash{})
-	Store, err = redistore.NewRediStore(10, "tcp", config.Settings.RedisURL, "", []byte("instantly_web_sid"))
+	Store, err = redistore.NewRediStore(10, "tcp", config.Settings.RedisURL, config.Settings.RedisPassword, []byte("instantly_web_sid"))
 
 	if err != nil {
 		log.Info(fmt.Sprintf("Error connecting to redis instance %v", err))

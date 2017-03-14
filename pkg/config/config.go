@@ -21,6 +21,7 @@ type Conf struct {
 	DBPath            string
 	MigrationsDir     string
 	RedisURL          string
+	RedisPassword     string
 }
 
 func init() {
@@ -45,4 +46,5 @@ func init() {
 	Settings.DBPath = viper.GetString("DB_PATH")
 	Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
 	Settings.RedisURL = viper.GetString("REDIS_URL")
+	Settings.RedisPassword = viper.GetString("REDIS_PASSWORD")
 }
