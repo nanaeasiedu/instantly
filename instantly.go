@@ -23,14 +23,12 @@ func main() {
 	echoInstance.Use(middleware.Logger())
 	echoInstance.Use(middleware.Gzip())
 	echoInstance.Use(middleware.CORS())
-	echoInstance.Static("/static", "web/static")
-	echoInstance.Renderer = web.NewTemplateRenderer()
 
 	if config.Settings.Env == "development" {
 		echoInstance.Debug = true
 	}
 
-	echoInstance.GET("/", web.HomeHandler)
+	web.StartWebRouter(echoInstance)
 	api.StartAPIRouter(echoInstance)
 
 	echoInstance.Start(":3000")

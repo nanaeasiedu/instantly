@@ -7,32 +7,24 @@ import (
 	"github.com/labstack/echo"
 )
 
-type Template struct {
-	Home   *template.Template
-	Login  *template.Template
-	Signup *template.Template
-}
+type Template struct{}
 
 func NewTemplateRenderer() *Template {
 	renderer := new(Template)
-	renderer.Home, _ = template.New("home").ParseFiles("web/templates/layout.html", "web/templates/index.html")
-	renderer.Login, _ = template.New("login").ParseFiles("web/templates/layout.html", "web/templates/login.html")
-	renderer.Signup, _ = template.New("signup").ParseFiles("web/templates/layout.html", "web/templates/signup.html")
-
 	return renderer
 }
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	var template *template.Template
-
+	var templateName string
 	switch name {
 	case "index":
-		template = t.Home
+		templateName = "index"
 	case "login":
-		template = t.Login
+		templateName = "login"
 	case "signup":
-		template = t.Signup
+		templateName = "signup"
 	}
 
+	template, _ := template.New("home").ParseFiles("web/templates/layout.html", "web/templates/"+templateName+".html")
 	return template.ExecuteTemplate(w, "base", data)
 }

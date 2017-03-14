@@ -20,6 +20,7 @@ type Conf struct {
 	DBName            string
 	DBPath            string
 	MigrationsDir     string
+	RedisURL          string
 }
 
 func init() {
@@ -40,14 +41,8 @@ func init() {
 	Settings.BrokerSender = viper.GetString("BROKER_SENDER")
 	Settings.BrokerBaseURL = viper.GetString("BROKER_BASE_URL")
 	Settings.MigrationsDir = viper.GetString("MIGRATIONS_DIR")
-
-	if Settings.Env == "production" {
-		Settings.DBName = viper.GetString("PROD_DB_NAME")
-		Settings.DBPath = viper.GetString("PROD_DB_PATH")
-		Settings.BrokerCallbackURL = viper.GetString("PROD_BROKER_CALLBACK_URL")
-	} else {
-		Settings.DBName = viper.GetString("DB_NAME")
-		Settings.DBPath = viper.GetString("DB_PATH")
-		Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
-	}
+	Settings.DBName = viper.GetString("DB_NAME")
+	Settings.DBPath = viper.GetString("DB_PATH")
+	Settings.BrokerCallbackURL = viper.GetString("BROKER_CALLBACK_URL")
+	Settings.RedisURL = viper.GetString("REDIS_URL")
 }

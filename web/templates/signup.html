@@ -1,0 +1,67 @@
+{{define "body"}}
+<div class="row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+        <div class="login-panel panel panel-default">
+            <div class="panel-heading">Sign up</div>
+            <div class="panel-body">
+                <form id="register-form" role="form" action="/register" method="POST">
+                    <fieldset>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">Sign up</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<!-- /.row -->
+{{end}} {{define "scripts"}}
+<script>
+    $('#register-form').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-block', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            password: {
+                required: true
+            }
+        },
+
+        highlight: function (element) { // hightlight error inputs
+            $(element)
+                .closest('.form-group').addClass('has-error'); // set error class to the control group
+        },
+
+        success: function (label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.attr("name") == "tnc") { // insert checkbox errors after the container
+                error.insertAfter($('#register_tnc_error'));
+            } else if (element.closest('.input-icon').size() === 1) {
+                error.insertAfter(element.closest('.input-icon'));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+
+        submitHandler: function (form) {
+            form.submit()
+        }
+    });
+
+</script>
+{{end}}
