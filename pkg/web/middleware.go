@@ -14,7 +14,6 @@ func SessionMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		session, _ := Store.Get(c.Request(), "_sid")
 		log.Info(fmt.Sprintf("%v", session))
-		// session.Save(c.Request(), c.Response().Writer())
 		c.Set("session", session)
 
 		if id, ok := session.Values["id"]; ok {

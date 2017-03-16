@@ -36,6 +36,13 @@
                 $(this).find('em:first').toggleClass("glyphicon-minus");
             });
             $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+
+            var $flash = $('#flash');
+            if ($flash.length) {
+                setTimeout(function () {
+                    $flash.hide();
+                }, 3000);
+            }
         }(window.jQuery);
 
         $(window).on('resize', function () {

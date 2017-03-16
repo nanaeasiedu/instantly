@@ -38,4 +38,5 @@ func StartWebRouter(e *echo.Echo) {
 	web.POST("login", LoginUser)
 	web.GET("register", RegisterHandler)
 	web.POST("register", RegisterUser)
+	web.GET("logout", Logout)
 }

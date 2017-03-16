@@ -1,0 +1,16 @@
+{{define "flash"}} {{range .}}
+<div class="row" id="flash">
+    <div class="col-lg-12">
+        <div class="alert {{if eq .Type "error"}}
+				bg-danger
+                {{else if eq .Type "warning"}}
+                    bg-warning
+                {{else if eq .Type "success"}}
+                    bg-success
+                {{end}}" role="alert">
+            {{ .Message }}<a href="#" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+        </div>
+    </div>
+</div>
+<!--/.row-->
+{{end}} {{end}}

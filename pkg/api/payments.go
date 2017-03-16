@@ -24,15 +24,17 @@ var paymentsSolution payments.MPayment = broker.NewBroker(config.Settings.UnityC
 
 func HandlePayments(c echo.Context) error {
 	request := payments.NewReqeust()
+	user := c.Get("user").(*models.User)
 	err := c.Bind(request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, Response{Status: "error", Message: err.Error()})
 	}
 
 	log.Info("Log the api request body", request)
-	newTransaction, err := models.CreateTransaction(request, request.GetType())
+	newTransaction, err := models.CreateTransaction(request, request.GetType(), user)
 
 	if err != nil {
+		log.Error(err)
 		return c.JSON(http.StatusInternalServerError, Response{Status: "error", Message: err.Error()})
 	}
 

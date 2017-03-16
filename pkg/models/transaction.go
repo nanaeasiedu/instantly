@@ -31,7 +31,7 @@ type Transaction struct {
 	UserID       int       `json:"userID"`
 }
 
-func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string) (*Transaction, error) {
+func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string, user *User) (*Transaction, error) {
 	trxDataStore := new(Transaction)
 	trxDataStore.Amount = paymentRequest.GetAmount()
 	trxDataStore.MNO = paymentRequest.GetNetwork()
@@ -41,6 +41,7 @@ func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string
 	trxDataStore.CreatedAt = time.Now()
 	trxDataStore.Type = typeOfTrx
 	trxDataStore.ReceiveToken = paymentRequest.GetReceiveToken()
+	trxDataStore.UserID = user.ID
 
 	if err := trxDataStore.Validate(); err != nil {
 		return nil, err

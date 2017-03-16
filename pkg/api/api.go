@@ -1,22 +1,18 @@
 package api
 
 import (
+	"errors"
+
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
-	"github.com/ngenerio/instantly/pkg/config"
 )
 
+var ErrProvideAPIKey error = errors.New("API Key is required in the header. X-Api-Key")
+var ErrInternalServer error = errors.New("Internal Server Error")
+var ErrInvalidCredentials error = errors.New("Invalid API Key")
+
 func StartAPIRouter(e *echo.Echo) {
-	authMiddleware := middleware.BasicAuth(func(username, password string) bool {
-		if username == config.Settings.APIClientUsername && password == config.Settings.APIClientPassword {
-			return true
-		}
-
-		return false
-	})
-
-	groupedAPI := e.Group("/api/v1/payment")
-	groupedAPI.POST("", HandlePayments, authMiddleware)
-	groupedAPI.POST("/transfer", HandlePaymentsTransfer, authMiddleware)
+	groupedAPI := e.Group("/api/v1/payment", AllowHeaders)
+	groupedAPI.POST("", HandlePayments, RequireAPIKey)
+	groupedAPI.POST("/transfer", HandlePaymentsTransfer, RequireAPIKey)
 	groupedAPI.GET("/callback", HandleCallback)
 }

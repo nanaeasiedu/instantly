@@ -25,6 +25,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 		templateName = "signup"
 	}
 
-	template, _ := template.New("home").ParseFiles("web/templates/layout.html", "web/templates/"+templateName+".html")
+	template, _ := template.New("home").ParseFiles("web/templates/layout.html", "web/templates/flash.html", "web/templates/"+templateName+".html")
 	return template.ExecuteTemplate(w, "base", data)
 }

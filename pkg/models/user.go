@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/ngenerio/instantly/pkg/utils"
 	"github.com/ngenerio/instantly/pkg/web/payloads"
 	"golang.org/x/crypto/bcrypt"
@@ -49,4 +50,15 @@ func CreateUser(user *payloads.User) (*User, error) {
 func (u *User) GetUser(query map[string]interface{}) error {
 	err := db.Where(query).First(u).Error
 	return err
+}
+
+func DoesUserExist(query map[string]interface{}) (bool, error) {
+	u := User{}
+	err := db.Where(query).First(&u).Error
+	if err == gorm.ErrRecordNotFound {
+		return false, nil
+	} else if err == nil {
+		return true, nil
+	}
+	return false, err
 }

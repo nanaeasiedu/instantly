@@ -12,7 +12,7 @@ type Flash struct {
 	Message string
 }
 
-func AddFlash(c echo.Context, w http.ResponseWriter, r *http.Request, flashType, message string) {
+func SetFlash(c echo.Context, w http.ResponseWriter, r *http.Request, flashType, message string) {
 	session := c.Get("session").(*sessions.Session)
 	session.AddFlash(Flash{flashType, message})
 	session.Save(r, w)

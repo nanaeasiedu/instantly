@@ -6,6 +6,7 @@
             <div class="panel-body">
                 <form id="register-form" role="form" action="/register" method="POST">
                     <fieldset>
+                        {{template "flash" .Flashes}}
                         <div class="form-group">
                             <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
                         </div>

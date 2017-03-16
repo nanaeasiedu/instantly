@@ -4,8 +4,9 @@
         <div class="login-panel panel panel-default">
             <div class="panel-heading">Log in</div>
             <div class="panel-body">
-                <form id="login-form" role="form" action="/login">
+                <form id="login-form" method="POST" role="form" action="/login">
                     <fieldset>
+                        {{template "flash" .Flashes}}
                         <div class="form-group">
                             <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
                         </div>
@@ -63,7 +64,7 @@
         },
 
         submitHandler: function (form) {
-            $(form).submit()
+            form.submit();
         }
     });
 
