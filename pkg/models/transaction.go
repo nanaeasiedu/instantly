@@ -1,8 +1,10 @@
 package models
 
 import (
+	"errors"
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/ngenerio/instantly/pkg/payments"
 	"github.com/ngenerio/instantly/pkg/utils"
 )
@@ -11,7 +13,11 @@ const (
 	StatusPending = "PENDING"
 	StatusFailed  = "FAILED"
 	StatusSuccess = "SUCCESS"
+	Credit        = "credit"
+	Debit         = "debit"
 )
+
+var ErrInvalidTransactionType error = errors.New("Invalid transaction type")
 
 type Transaction struct {
 	Id           int       `json:"id"`
@@ -39,16 +45,31 @@ func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string
 	trxDataStore.ReferenceID = paymentRequest.GetReferenceID()
 	trxDataStore.Status = StatusPending
 	trxDataStore.CreatedAt = time.Now()
-	trxDataStore.Type = typeOfTrx
 	trxDataStore.ReceiveToken = paymentRequest.GetReceiveToken()
 	trxDataStore.UserID = user.ID
 
+	if typeOfTrx != Debit || typeOfTrx != Credit {
+		return nil, ErrInvalidTransactionType
+	}
+
+	trxDataStore.Type = typeOfTrx
 	if err := trxDataStore.Validate(); err != nil {
 		return nil, err
 	}
 
 	err := db.Create(trxDataStore).Error
 	return trxDataStore, err
+}
+
+func GetUserTransactions(userID int) ([]Transaction, error) {
+	var transactions []Transaction
+	err := db.Where("user_id = ?", userID).Find(&transactions).Error
+
+	if err != gorm.ErrRecordNotFound {
+		return transactions, nil
+	}
+
+	return transactions, err
 }
 
 func (trx *Transaction) Update() error {

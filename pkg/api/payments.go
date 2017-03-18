@@ -15,11 +15,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	Debit  = "debit"
-	Credit = "credit"
-)
-
 var paymentsSolution payments.MPayment = broker.NewBroker(config.Settings.UnityClientID, config.Settings.UnityClientSecret, config.Settings.BrokerToken, config.Settings.BrokerSender, config.Settings.BrokerBaseURL, config.Settings.BrokerCallbackURL)
 
 func HandlePayments(c echo.Context) error {
@@ -39,7 +34,7 @@ func HandlePayments(c echo.Context) error {
 	}
 
 	var response payments.MPaymentResponse
-	if request.GetType() == Debit {
+	if request.GetType() == models.Debit {
 		response = paymentsSolution.DebitWallet(request)
 	} else {
 		response = paymentsSolution.CreditWallet(request)

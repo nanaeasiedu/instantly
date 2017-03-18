@@ -107,7 +107,7 @@
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
-                        <div class="large">120K</div>
+                        <div class="large">{{ .Data.MoneyIn }}</div>
                         <div class="text-muted">Money In</div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
-                        <div class="large">52K</div>
+                        <div class="large">{{ .Data.MoneyOut }}</div>
                         <div class="text-muted">Money Out</div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
-                        <div class="large">13K</div>
+                        <div class="large">{{ .Data.TotalTransactions }}</div>
                         <div class="text-muted">Total Transactions</div>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>MTN</h4>
-                    <div class="easypiechart" id="easypiechart-blue" data-percent="92"><span class="percent">92%</span>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="{{ .Data.TotalMTN }}"><span class="percent">{{ .Data.TotalMTN }}%</span>
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>TIGO CASH</h4>
-                    <div class="easypiechart" id="easypiechart-orange" data-percent="65"><span class="percent">5%</span>
+                    <div class="easypiechart" id="easypiechart-orange" data-percent="{{ .Data.TotalTigo }}"><span class="percent">{{ .Data.TotalTigo }}%</span>
                     </div>
                 </div>
             </div>
@@ -183,7 +183,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>VODAFONE CASH</h4>
-                    <div class="easypiechart" id="easypiechart-teal" data-percent="56"><span class="percent">2%</span>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="{{ .Data.TotalVodafone }}"><span class="percent">{{ .Data.TotalVodafone }}%</span>
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>AIRTEL</h4>
-                    <div class="easypiechart" id="easypiechart-red" data-percent="27"><span class="percent">1%</span>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="{{ .Data.TotalAirtel }}"><span class="percent">{{ .Data.TotalAirtel }}%</span>
                     </div>
                 </div>
             </div>
@@ -202,6 +202,7 @@
 <!--/.main-->
 
 {{end}} {{define "scripts"}}
+<script src="/static/js/easypiechart-data.js"></script>
 <script>
     var randomScalingFactor = function () { return Math.round(Math.random() * 1000) };
 

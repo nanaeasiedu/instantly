@@ -22,6 +22,78 @@ var ErrInternal error = errors.New("Something happened. Please try again")
 func HomeHandler(c echo.Context) error {
 	params := new(Params)
 	params.Title = "Home - Instant"
+	session := c.Get("session").(*sessions.Session)
+	id := session.Values["id"].(int)
+
+	transactions, err := models.GetUserTransactions(id)
+
+	if err != nil {
+		log.WithFields(log.Fields{
+			"user_id": id,
+		}).Error("Error retrieving user transactions")
+		return err
+	}
+
+	var moneyIn, moneyOut float64
+	var totalTransactions, totalFailedTransactions int
+	var totalMTN, totalVodafone, totalTigo, totalAirtel float64
+
+	for _, trx := range transactions {
+		if trx.Status == models.StatusFailed || trx.Status == models.StatusPending {
+			if trx.Status == models.StatusFailed {
+				totalFailedTransactions += 1
+			}
+			continue
+		}
+
+		if trx.Type == models.Credit {
+			moneyIn += trx.Amount
+		} else {
+			moneyOut += trx.Amount
+		}
+
+		switch trx.MNO {
+		case "MTN":
+			totalMTN += 1
+		case "VODAFONE":
+			totalVodafone += 1
+		case "TIGO":
+			totalTigo += 1
+		case "AIRTEL":
+			totalAirtel += 1
+		}
+		totalTransactions += 1
+	}
+
+	params.Data = make(map[string]interface{})
+	params.Data["MoneyIn"] = moneyIn
+	params.Data["MoneyOut"] = moneyOut
+	params.Data["TotalTransactions"] = totalTransactions
+	params.Data["TotalFailedTransactions"] = totalFailedTransactions
+
+	if totalMTN == float64(0) {
+		params.Data["TotalMTN"] = 0
+	} else {
+		params.Data["TotalMTN"] = (totalMTN / float64(totalTransactions)) * 100
+	}
+
+	if totalVodafone == float64(0) {
+		params.Data["TotalVodafone"] = 0
+	} else {
+		params.Data["TotalVodafone"] = (totalVodafone / float64(totalTransactions)) * 100
+	}
+
+	if totalTigo == float64(0) {
+		params.Data["TotalTigo"] = 0
+	} else {
+		params.Data["TotalTigo"] = (totalTigo / float64(totalTransactions)) * 100
+	}
+
+	if totalAirtel == float64(0) {
+		params.Data["TotalAirtel"] = 0
+	} else {
+		params.Data["TotalAirtel"] = (totalAirtel / float64(totalTransactions)) * 100
+	}
 	return c.Render(http.StatusOK, "index", params)
 }
 
