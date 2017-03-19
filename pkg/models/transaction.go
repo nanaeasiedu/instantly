@@ -49,7 +49,7 @@ func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string
 	trxDataStore.ReceiveToken = paymentRequest.GetReceiveToken()
 	trxDataStore.UserID = user.ID
 
-	if typeOfTrx != Debit || typeOfTrx != Credit {
+	if typeOfTrx != Debit && typeOfTrx != Credit {
 		return nil, ErrInvalidTransactionType
 	}
 
