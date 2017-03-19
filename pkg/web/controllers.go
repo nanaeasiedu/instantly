@@ -21,7 +21,7 @@ var ErrInternal error = errors.New("Something happened. Please try again")
 
 func HomeHandler(c echo.Context) error {
 	params := new(Params)
-	params.Title = "Home - Instant"
+	params.Title = "Home - Instantly"
 	session := c.Get("session").(*sessions.Session)
 	id := session.Values["id"].(int)
 
@@ -70,7 +70,7 @@ func HomeHandler(c echo.Context) error {
 	params.Data["MoneyOut"] = moneyOut
 	params.Data["TotalTransactions"] = totalTransactions
 	params.Data["TotalFailedTransactions"] = totalFailedTransactions
-
+	params.Data["Page"] = "home"
 	if totalMTN == float64(0) {
 		params.Data["TotalMTN"] = 0
 	} else {
@@ -97,9 +97,67 @@ func HomeHandler(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", params)
 }
 
+func TransactionsHandler(c echo.Context) error {
+	params := new(Params)
+	params.Title = "Transactions - Instantly"
+	session := c.Get("session").(*sessions.Session)
+	id := session.Values["id"].(int)
+
+	transactions, err := models.GetUserTransactions(id)
+
+	if err != nil {
+		log.WithFields(log.Fields{
+			"user_id": id,
+		}).Error("Error retrieving user transactions")
+		return err
+	}
+
+	params.Data = make(map[string]interface{})
+	params.Data["Page"] = "transactions"
+	params.Data["Transactions"] = transactions
+
+	return c.Render(http.StatusOK, "transactions", params)
+}
+
+func SettingsHandler(c echo.Context) error {
+	params := new(Params)
+	params.Title = "Settings - Instantly"
+	params.Data = make(map[string]interface{})
+	params.Data["Page"] = "settings"
+	session := c.Get("session").(*sessions.Session)
+	params.Flashes = session.Flashes()
+	session.Save(c.Request(), c.Response())
+	user := c.Get("user").(*models.User)
+	params.Data["User"] = user
+	return c.Render(http.StatusOK, "settings", params)
+}
+
+func SaveSettings(c echo.Context) error {
+	sett := new(payloads.Settings)
+	if err := c.Bind(sett); err != nil {
+		SetFlash(c, c.Response().Writer(), c.Request(), "error", ErrInternal.Error())
+		return c.Redirect(http.StatusFound, "/settings")
+	}
+
+	user := c.Get("user").(*models.User)
+	user.CallbackURL = sett.CallbackURL
+	user.Token = sett.Token
+	user.NetworkOperator = sett.NetworkOperator
+	user.MobileNumber = sett.MobileNumber
+	err := user.Update()
+
+	if err != nil {
+		SetFlash(c, c.Response().Writer(), c.Request(), "error", ErrInternal.Error())
+		return c.Redirect(http.StatusFound, "/settings")
+	}
+
+	SetFlash(c, c.Response().Writer(), c.Request(), "success", "Settings have been saved")
+	return c.Redirect(http.StatusFound, "/settings")
+}
+
 func LoginHandler(c echo.Context) error {
 	params := new(Params)
-	params.Title = "Login - Instant"
+	params.Title = "Login - Instantly"
 	session := c.Get("session").(*sessions.Session)
 	params.Flashes = session.Flashes()
 	session.Save(c.Request(), c.Response())
@@ -108,7 +166,7 @@ func LoginHandler(c echo.Context) error {
 
 func RegisterHandler(c echo.Context) error {
 	params := new(Params)
-	params.Title = "Register - Instant"
+	params.Title = "Register - Instantly"
 	session := c.Get("session").(*sessions.Session)
 	params.Flashes = session.Flashes()
 	session.Save(c.Request(), c.Response().Writer())

@@ -39,4 +39,7 @@ func StartWebRouter(e *echo.Echo) {
 	web.GET("register", RegisterHandler)
 	web.POST("register", RegisterUser)
 	web.GET("logout", Logout)
+	web.GET("transactions", TransactionsHandler, RequireLogin)
+	web.GET("settings", SettingsHandler, RequireLogin)
+	web.POST("settings", SaveSettings, RequireLogin)
 }

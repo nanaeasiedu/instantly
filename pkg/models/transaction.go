@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/ngenerio/instantly/pkg/payments"
 	"github.com/ngenerio/instantly/pkg/utils"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -65,9 +66,11 @@ func GetUserTransactions(userID int) ([]Transaction, error) {
 	var transactions []Transaction
 	err := db.Where("user_id = ?", userID).Find(&transactions).Error
 
-	if err != gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound {
 		return transactions, nil
 	}
+
+	log.Info(transactions)
 
 	return transactions, err
 }

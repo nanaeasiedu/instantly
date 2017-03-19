@@ -1,0 +1,33 @@
+{{define "sidebar"}}
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <ul class="nav menu">
+        <li class="{{if eq .Page "home"}}active{{end}}">
+            <a href="/">
+                <svg class="glyph stroked dashboard-dial">
+                    <use xlink:href="#stroked-dashboard-dial"></use>
+                </svg> Dashboard</a>
+        </li>
+        <li class="{{if eq .Page "transactions"}}active{{end}}">
+            <a href="/transactions">
+                <svg class="glyph stroked calendar">
+                    <use xlink:href="#stroked-calendar"></use>
+                </svg> Transactions</a>
+        </li>
+        <li class="{{if eq .Page "settings"}}active{{end}}">
+            <a href="/settings">
+                <svg class="glyph stroked gear">
+                    <use xlink:href="#stroked-gear"></use>
+                </svg> Settings</a>
+        </li>
+        <li role="presentation" class="divider"></li>
+        <li>
+            <a href="/logout">
+                <svg class="glyph stroked cancel">
+                    <use xlink:href="#stroked-cancel"></use>
+                </svg> Logout </a>
+        </li>
+    </ul>
+
+</div>
+<!--/.sidebar-->
+{{end}}

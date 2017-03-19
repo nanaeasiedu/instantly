@@ -52,6 +52,11 @@ func (u *User) GetUser(query map[string]interface{}) error {
 	return err
 }
 
+func (u *User) Update() error {
+	u.UpdatedAt = time.Now()
+	return db.Save(u).Error
+}
+
 func DoesUserExist(query map[string]interface{}) (bool, error) {
 	u := User{}
 	err := db.Where(query).First(&u).Error

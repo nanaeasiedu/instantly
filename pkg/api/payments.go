@@ -12,6 +12,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/ngenerio/instantly/pkg/config"
+	"github.com/parnurzeal/gorequest"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -92,5 +93,29 @@ func HandleCallback(c echo.Context) error {
 	newTrx.CompletedAt = time.Now()
 
 	newTrx.Update()
+
+	exists, err := models.DoesUserExist(map[string]interface{}{"id": newTrx.UserID})
+	if err != nil || !exists {
+		return nil
+	}
+
+	user := new(models.User)
+	err = user.GetUser(map[string]interface{}{"id": newTrx.UserID})
+	if err != nil {
+		return nil
+	}
+
+	if user.CallbackURL == "" {
+		return nil
+	}
+
+	request := gorequest.New()
+	request.
+		Set("Accept", "application/json").
+		Set("Content-Type", "application/json").
+		Post(user.CallbackURL).
+		Send(map[string]interface{}{"data": newTrx}).
+		End()
+
 	return nil
 }
