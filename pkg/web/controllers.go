@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -37,19 +38,24 @@ func HomeHandler(c echo.Context) error {
 	var moneyIn, moneyOut float64
 	var totalTransactions, totalFailedTransactions int
 	var totalMTN, totalVodafone, totalTigo, totalAirtel float64
+	var successfulTransactions, failedTransactions, pendingTransactions []models.Transaction
 
 	for _, trx := range transactions {
 		if trx.Status == models.StatusFailed || trx.Status == models.StatusPending {
 			if trx.Status == models.StatusFailed {
 				totalFailedTransactions += 1
+				failedTransactions = append(failedTransactions, trx)
+			} else {
+				pendingTransactions = append(pendingTransactions, trx)
 			}
 			continue
 		}
 
+		successfulTransactions = append(successfulTransactions, trx)
 		if trx.Type == models.Credit {
-			moneyIn += trx.Amount
-		} else {
 			moneyOut += trx.Amount
+		} else {
+			moneyIn += trx.Amount
 		}
 
 		switch trx.MNO {
@@ -65,12 +71,21 @@ func HomeHandler(c echo.Context) error {
 		totalTransactions += 1
 	}
 
+	successBytes, _ := json.Marshal(successfulTransactions)
+	pendingBytes, _ := json.Marshal(pendingTransactions)
+	failedBytes, _ := json.Marshal(failedTransactions)
+
 	params.Data = make(map[string]interface{})
 	params.Data["MoneyIn"] = moneyIn
 	params.Data["MoneyOut"] = moneyOut
-	params.Data["TotalTransactions"] = totalTransactions
+	params.Data["TotalTransactions"] = len(transactions)
 	params.Data["TotalFailedTransactions"] = totalFailedTransactions
+	params.Data["SuccessfulTransactions"] = string(successBytes[:])
+	params.Data["PendingTransactions"] = string(pendingBytes[:])
+	params.Data["FailedTransactions"] = string(failedBytes[:])
+
 	params.Data["Page"] = "home"
+
 	if totalMTN == float64(0) {
 		params.Data["TotalMTN"] = 0
 	} else {
@@ -94,6 +109,7 @@ func HomeHandler(c echo.Context) error {
 	} else {
 		params.Data["TotalAirtel"] = (totalAirtel / float64(totalTransactions)) * 100
 	}
+
 	return c.Render(http.StatusOK, "index", params)
 }
 
