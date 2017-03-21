@@ -38,6 +38,27 @@ type Transaction struct {
 	UserID       int       `json:"userID"`
 }
 
+func (trx *Transaction) Update() error {
+	trx.UpdatedAt = time.Now()
+	return db.Save(trx).Error
+}
+
+func (trx *Transaction) GetTransaction(queryParam map[string]interface{}) error {
+	err := db.Where(queryParam).First(trx).Error
+	return err
+}
+
+func (trx *Transaction) Validate() error {
+	phoneNumber, err := utils.ParsePhoneNumber(trx.MobileNumber)
+
+	if err != nil {
+		return err
+	}
+
+	trx.MobileNumber = phoneNumber
+	return nil
+}
+
 func CreateTransaction(paymentRequest payments.MPaymentRequest, typeOfTrx string, user *User) (*Transaction, error) {
 	trxDataStore := new(Transaction)
 	trxDataStore.Amount = paymentRequest.GetAmount()
@@ -73,25 +94,4 @@ func GetUserTransactions(userID int) ([]Transaction, error) {
 	log.Info(transactions)
 
 	return transactions, err
-}
-
-func (trx *Transaction) Update() error {
-	trx.UpdatedAt = time.Now()
-	return db.Save(trx).Error
-}
-
-func (trx *Transaction) GetTransaction(queryParam map[string]interface{}) error {
-	err := db.Where(queryParam).First(trx).Error
-	return err
-}
-
-func (trx *Transaction) Validate() error {
-	phoneNumber, err := utils.ParsePhoneNumber(trx.MobileNumber)
-
-	if err != nil {
-		return err
-	}
-
-	trx.MobileNumber = phoneNumber
-	return nil
 }

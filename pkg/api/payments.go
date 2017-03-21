@@ -26,8 +26,24 @@ func HandlePayments(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, Response{Status: "error", Message: err.Error()})
 	}
 
+	if request.GetType() == models.Credit {
+		if request.GetAmount() > user.CurrentBalance {
+			return c.JSON(http.StatusBadRequest, Response{Status: "error", Message: "Amount is greater than current balance"})
+		}
+	}
+
 	log.Info("Log the api request body", request)
 	newTransaction, err := models.CreateTransaction(request, request.GetType(), user)
+
+	if newTransaction.Type == models.Credit {
+		user.CurrentBalance = user.CurrentBalance - newTransaction.Amount
+	} else {
+		user.CurrentBalance = user.CurrentBalance + newTransaction.Amount
+	}
+
+	if err := user.Update(); err != nil {
+		return c.JSON(http.StatusInternalServerError, Response{Status: "error", Message: err.Error()})
+	}
 
 	if err != nil {
 		log.Error(err)
@@ -91,18 +107,24 @@ func HandleCallback(c echo.Context) error {
 	}
 
 	newTrx.CompletedAt = time.Now()
-
 	newTrx.Update()
-
-	exists, err := models.DoesUserExist(map[string]interface{}{"id": newTrx.UserID})
-	if err != nil || !exists {
-		return nil
-	}
 
 	user := new(models.User)
 	err = user.GetUser(map[string]interface{}{"id": newTrx.UserID})
 	if err != nil {
 		return nil
+	}
+
+	if newTrx.Status == models.StatusFailed {
+		if newTrx.Type == models.Credit {
+			user.CurrentBalance = user.CurrentBalance + newTrx.Amount
+		} else {
+			user.CurrentBalance = user.CurrentBalance - newTrx.Amount
+		}
+
+		if err := user.Update(); err != nil {
+			return nil
+		}
 	}
 
 	if user.CallbackURL == "" {
