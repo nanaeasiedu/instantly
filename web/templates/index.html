@@ -23,12 +23,12 @@
     <!--/.row-->
 
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="col-xs-12 col-md-6 col-lg-3">
             <div class="panel panel-blue panel-widget ">
                 <div class="row no-padding">
                     <div class="col-sm-3 col-lg-5 widget-left">
-                        <svg class="glyph stroked bag">
-                            <use xlink:href="#stroked-bag"></use>
+                        <svg class="glyph stroked arrow down">
+                            <use xlink:href="#stroked-arrow-down"></use>
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
@@ -38,12 +38,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="col-xs-12 col-md-6 col-lg-3">
             <div class="panel panel-orange panel-widget">
                 <div class="row no-padding">
                     <div class="col-sm-3 col-lg-5 widget-left">
-                        <svg class="glyph stroked empty-message">
-                            <use xlink:href="#stroked-empty-message"></use>
+                        <svg class="glyph stroked arrow up">
+                            <use xlink:href="#stroked-arrow-up"></use>
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
@@ -53,17 +53,33 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="col-xs-12 col-md-6 col-lg-3">
             <div class="panel panel-teal panel-widget">
                 <div class="row no-padding">
                     <div class="col-sm-3 col-lg-5 widget-left">
-                        <svg class="glyph stroked male-user">
-                            <use xlink:href="#stroked-male-user"></use>
+                        <svg class="glyph stroked dashboard dial">
+                            <use xlink:href="#stroked-dashboard-dial"></use>
                         </svg>
                     </div>
                     <div class="col-sm-9 col-lg-7 widget-right">
                         <div class="large">{{ .Data.TotalTransactions }}</div>
                         <div class="text-muted">Total Transactions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="panel panel-red panel-widget">
+                <div class="row no-padding">
+                    <div class="col-sm-3 col-lg-5 widget-left">
+                        <svg class="glyph stroked line-graph">
+                            <use xlink:href="#stroked-line-graph"></use>
+                        </svg>
+                    </div>
+                    <div class="col-sm-9 col-lg-7 widget-right">
+                        <div class="large">{{ .Data.CurrentBalance }}</div>
+                        <div class="text-muted">Current Balance</div>
                     </div>
                 </div>
             </div>
@@ -90,7 +106,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>MTN</h4>
-                    <div class="easypiechart" id="easypiechart-blue" data-percent="{{ .Data.TotalMTN }}"><span class="percent">{{ .Data.TotalMTN }}%</span>
+                    <div class="easypiechart" id="easypiechart-orange" data-percent="{{ .Data.TotalMTN }}"><span class="percent">{{ .Data.TotalMTN }}%</span>
                     </div>
                 </div>
             </div>
@@ -99,7 +115,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>TIGO CASH</h4>
-                    <div class="easypiechart" id="easypiechart-orange" data-percent="{{ .Data.TotalTigo }}"><span class="percent">{{ .Data.TotalTigo }}%</span>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="{{ .Data.TotalTigo }}"><span class="percent">{{ .Data.TotalTigo }}%</span>
                     </div>
                 </div>
             </div>
@@ -108,7 +124,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>VODAFONE CASH</h4>
-                    <div class="easypiechart" id="easypiechart-teal" data-percent="{{ .Data.TotalVodafone }}"><span class="percent">{{ .Data.TotalVodafone }}%</span>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="{{ .Data.TotalVodafone }}"><span class="percent">{{ .Data.TotalVodafone }}%</span>
                     </div>
                 </div>
             </div>
@@ -117,7 +133,7 @@
             <div class="panel panel-default">
                 <div class="panel-body easypiechart-panel">
                     <h4>AIRTEL</h4>
-                    <div class="easypiechart" id="easypiechart-red" data-percent="{{ .Data.TotalAirtel }}"><span class="percent">{{ .Data.TotalAirtel }}%</span>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="{{ .Data.TotalAirtel }}"><span class="percent">{{ .Data.TotalAirtel }}%</span>
                     </div>
                 </div>
             </div>
@@ -127,6 +143,7 @@
 <!--/.main-->
 
 {{end}} {{define "scripts"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
 <script src="/static/js/easypiechart-data.js"></script>
 <script>
     var failedTransactions = (JSON.parse("{{ .Data.FailedTransactions }}") || []).length;
@@ -137,16 +154,24 @@
         labels: ["Failed", "Pending", "Success"],
         datasets: [
             {
-                fillColor: [
+                label: "Transactions Overview",
+                backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
                 ],
-                strokeColor: [
+                borderColor: [
                     'rgba(255,99,132,1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
                 ],
+                borderWidth: 1,
                 data: [failedTransactions, pendingTransactions, successTransactions]
             }
         ]
@@ -154,9 +179,11 @@
 
 
     window.onload = function () {
-        var chart1 = document.getElementById("line-chart").getContext("2d");
-        window.myLine = new Chart(chart1).Bar(barChartData, {
-            responsive: true
+        var ctx = document.getElementById("line-chart").getContext("2d");
+        var barChart = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: { responsive: true }
         });
     };
 

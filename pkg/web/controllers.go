@@ -24,6 +24,7 @@ func HomeHandler(c echo.Context) error {
 	params := new(Params)
 	params.Title = "Home - Instantly"
 	session := c.Get("session").(*sessions.Session)
+	user := c.Get("user").(*models.User)
 	id := session.Values["id"].(int)
 
 	transactions, err := models.GetUserTransactions(id)
@@ -83,6 +84,7 @@ func HomeHandler(c echo.Context) error {
 	params.Data["SuccessfulTransactions"] = string(successBytes[:])
 	params.Data["PendingTransactions"] = string(pendingBytes[:])
 	params.Data["FailedTransactions"] = string(failedBytes[:])
+	params.Data["CurrentBalance"] = user.CurrentBalance
 
 	params.Data["Page"] = "home"
 
