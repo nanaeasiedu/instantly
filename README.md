@@ -26,12 +26,10 @@ You need `postgres` and `go` installed on your system to get this running:
 $ git clone https://github.com/ngenerio/instantly
 ```
 
-Create a config.yaml in the root directory of this project. Specify the configuration as the example below:
+Create a `config.yaml` in the root directory of this project. Specify the configuration as the example below:
 
 ```yaml
 SERVER_ENV: development # development or production
-API_CLIENT_USERNAME: username # The username for basic auth purposes with instantly api server
-API_CLIENT_PASSWORD: password # The password for basic auth purposes with instantly api server
 UNITY_CLIENT_ID: xxxxxxxx # Your unity client ID from SMSGH
 UNITY_CLIENT_SECRET: xxxxxxxx # Your unity client secret from SMSGH
 BROKER_TOKEN: xxxxx-xxxx-xxxx-xxxxx-xxxxxxxxx # Your broker token from broker
@@ -39,8 +37,23 @@ BROKER_SENDER: Instantly # Your app name
 BROKER_CALLBACK_URL: https://<host>:/api/v1/payment/callback # Specify host as the url this app has been hosted at
 BROKER_BASE_URL: https://api.smsgh.com/usp # Don't touch this
 DB_NAME: postgres # Database name: either `postgres` or `mysql`
-DB_PATH: user='' dbname=instantly_test sslmode=disable # Your database connection url
-MIGRATIONS_DIR: db/db_ # Don't touch this
+DB_PATH: user=<username> password=<password> host=<host> dbname=<somedb> sslmode=disable # Your database connection url
+MIGRATIONS_DIR: db # Don't touch this
+REDIS_URL: localhost:6379
+REDIS_PASSWORD:
+```
+
+Create a `dbconf.yml` in the `db` folder and specify the configuration:
+
+```yaml
+development:
+    driver: postgres
+    open: user=<username> password=<password> host=<host> dbname=<somedb_Test> sslmode=disable
+
+production:
+    driver: postgres
+    open: user=<username> password=<password> host=<host> dbname=<somedb> sslmode=disable
+
 ```
 
 Run these commands to install, build and run:
