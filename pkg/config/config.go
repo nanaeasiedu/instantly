@@ -9,8 +9,6 @@ var Settings Conf
 
 type Conf struct {
 	Env               string
-	APIClientUsername string
-	APIClientPassword string
 	UnityClientID     string
 	UnityClientSecret string
 	BrokerToken       string
@@ -34,8 +32,6 @@ func init() {
 	}
 
 	Settings.Env = viper.GetString("SERVER_ENV")
-	Settings.APIClientUsername = viper.GetString("API_CLIENT_USERNAME")
-	Settings.APIClientPassword = viper.GetString("API_CLIENT_PASSWORD")
 	Settings.UnityClientID = viper.GetString("UNITY_CLIENT_ID")
 	Settings.UnityClientSecret = viper.GetString("UNITY_CLIENT_SECRET")
 	Settings.BrokerToken = viper.GetString("BROKER_TOKEN")
