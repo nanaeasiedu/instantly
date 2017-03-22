@@ -27,23 +27,13 @@ func HandlePayments(c echo.Context) error {
 	}
 
 	if request.GetType() == models.Credit {
-		if request.GetAmount() > user.CurrentBalance {
+		if request.GetAmount() >= user.CurrentBalance {
 			return c.JSON(http.StatusBadRequest, Response{Status: "error", Message: "Amount is greater than current balance"})
 		}
 	}
 
-	log.Info("Log the api request body", request)
+	log.Info("Request body ", request)
 	newTransaction, err := models.CreateTransaction(request, request.GetType(), user)
-
-	if newTransaction.Type == models.Credit {
-		user.CurrentBalance = user.CurrentBalance - newTransaction.Amount
-	} else {
-		user.CurrentBalance = user.CurrentBalance + newTransaction.Amount
-	}
-
-	if err := user.Update(); err != nil {
-		return c.JSON(http.StatusInternalServerError, Response{Status: "error", Message: err.Error()})
-	}
 
 	if err != nil {
 		log.Error(err)
@@ -115,11 +105,11 @@ func HandleCallback(c echo.Context) error {
 		return nil
 	}
 
-	if newTrx.Status == models.StatusFailed {
+	if newTrx.Status == models.StatusSuccess {
 		if newTrx.Type == models.Credit {
-			user.CurrentBalance = user.CurrentBalance + newTrx.Amount
-		} else {
 			user.CurrentBalance = user.CurrentBalance - newTrx.Amount
+		} else {
+			user.CurrentBalance = user.CurrentBalance + newTrx.Amount
 		}
 
 		if err := user.Update(); err != nil {
