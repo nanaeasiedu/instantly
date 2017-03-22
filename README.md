@@ -87,7 +87,9 @@ This is the data you need to send to `Instantly`:
 - `type` - either debit or credit
 
 
-The payment endpoint is http://`host`:`port`/api/v1/payment. Send the `API_CLIENT_USERNAME` and `API_CLIENT_PASSWORD` as your `Basic Authentication` details.
+The payment endpoint is http://`host`:`port`/api/v1/payment. Send the your the `token` you get after registering in the headers as:
+
+`X-Api-Key`: <token>
 
 
 ```curl
