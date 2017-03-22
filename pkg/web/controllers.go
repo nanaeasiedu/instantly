@@ -84,6 +84,7 @@ func HomeHandler(c echo.Context) error {
 	params.Data["SuccessfulTransactions"] = string(successBytes[:])
 	params.Data["PendingTransactions"] = string(pendingBytes[:])
 	params.Data["FailedTransactions"] = string(failedBytes[:])
+	params.Data["User"] = user
 	params.Data["CurrentBalance"] = user.CurrentBalance
 
 	params.Data["Page"] = "home"
