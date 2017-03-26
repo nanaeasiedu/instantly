@@ -93,7 +93,7 @@ The payment endpoint is http://`host`:`port`/api/v1/payment. Send the your the `
 
 
 ```curl
-$ curl -u API_CLIENT_USERNAME:API_CLIENT_PASSWORD -X POST -d '{"phoneNumber":"2332xxxxxxxx","amount":50.00,"mno":"TIGO","name":"Eugene Asiedu","type":"debit"}' http://<host>:<port>/api/v1/payment
+$ curl -H "X-Api-Key: <Your API Token>" -X POST -d '{"phoneNumber":"2332xxxxxxxx","amount":50.00,"mno":"TIGO","name":"Eugene Asiedu","type":"debit"}' http://<host>:<port>/api/v1/payment
 ```
 
 
