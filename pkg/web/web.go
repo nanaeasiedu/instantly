@@ -29,10 +29,10 @@ func init() {
 }
 
 func StartWebRouter(e *echo.Echo) {
-	web := e.Group("/", SessionMiddleware)
 	e.Renderer = NewTemplateRenderer()
 	e.Static("/static", "web/static")
 
+	web := e.Group("/", SessionMiddleware)
 	web.GET("", HomeHandler, RequireLogin)
 	web.GET("login", LoginHandler)
 	web.POST("login", LoginUser)

@@ -219,6 +219,7 @@ func RegisterUser(c echo.Context) error {
 	log.Info(fmt.Sprintf("New user has been created %v", dbUser))
 	session := c.Get("session").(*sessions.Session)
 	session.Values["id"] = dbUser.ID
+	session.AddFlash(Flash{"success", "Thanks for registering. Go to the settings page to retrieve your token for API integrations"})
 	session.Save(c.Request(), c.Response().Writer())
 	c.Redirect(http.StatusFound, "/")
 	return nil
